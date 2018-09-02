@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {HashRouter as Router, Link, Route} from 'react-router-dom'
+import {HashRouter as Router, Link, Route, Switch} from 'react-router-dom'
 import axios from 'axios'
 import Home from './Home'
 import Users from './Users'
 import CreateUser from './CreateUser'
+import UpdateUser from './UpdateUser'
 
 class Main extends Component {
 
@@ -14,6 +15,13 @@ class Main extends Component {
         }
         this.deleteUser = this.deleteUser.bind(this)
         this.createUser = this.createUser.bind(this)
+        this.fetchUser = this.fetchUser.bind(this)
+        this.updateUser = this.updateUser.bind(this)
+    }
+
+    fetchUser(id) {
+        return axios.get(`/api/users/${id}`)
+            .then(response => response.data)
     }
 
     deleteUser(id) {
@@ -31,6 +39,14 @@ class Main extends Component {
             }))
     }
 
+    updateUser(user) {
+        return axios.put(`/api/users/${user.id}`, user)
+            .then(response => response.data)
+            .then(user => this.setState({
+                users: this.state.users.map(_user => _user.id !== user.id ? _user : user)
+            }))
+    }
+
     componentDidMount() {
         axios.get('/api/users')
             .then(response => response.data)
@@ -39,7 +55,7 @@ class Main extends Component {
 
     render() {
         const { users } = this.state
-        const { deleteUser, createUser } = this
+        const { deleteUser, createUser, fetchUser, updateUser } = this
 
         return (
             <Router>
@@ -59,7 +75,10 @@ class Main extends Component {
                     <div>
                         <Route exact path='/' render={() => <Home users={users} />} />
                         <Route path='/users' render={() => <Users users={users} deleteUser={deleteUser} />} />
-                        <Route path='/users/create' render={({history}) => <CreateUser createUser={createUser} history={history} />} />
+                        <Switch>
+                            <Route path='/users/create' render={({history}) => <CreateUser createUser={createUser} history={history} />} />
+                            <Route path='/users/:id' render={({history, match}) => <UpdateUser fetchUser={fetchUser} updateUser={updateUser} history={history} id={match.params.id}/>} />
+                        </Switch>
                     </div>
                 </div>
             </Router>

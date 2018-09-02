@@ -5,6 +5,7 @@ const app = express();
 module.exports = app;
 
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use('/api/users', require('./api/users'));
 

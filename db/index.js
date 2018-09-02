@@ -1,10 +1,11 @@
 const Sequelize = require('sequelize');
-const conn = new Sequelize(process.env.DATABASE_URL);
+const conn = new Sequelize(process.env.DATABASE_URL, {logging: false});
 
 const Users = conn.define('user', {
     name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
 });
 
@@ -20,9 +21,9 @@ const seed = () => {
     ]);
 };
 
-const updateUser = (id, name) => {
+const updateUser = (id, body) => {
     return Users.findById(id)
-        .then(user => user.update({name}));
+        .then(user => user.update(body));
 };
 
 module.exports = {

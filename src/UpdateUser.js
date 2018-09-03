@@ -5,7 +5,8 @@ class UpdateUser extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: ''
+            name: '',
+            error: ''
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -32,16 +33,17 @@ class UpdateUser extends Component {
             .then(() => {
                 this.props.history.push('/users')
             })
+            .catch((error) => this.setState({error}))
     }
 
     componentDidUpdate(prevProps){
         if(prevProps.id !== this.props.id){
-          this.fetchUser(this.props.id);
+            this.fetchUser(this.props.id); 
         }
       }
 
     render() {
-        const { name } = this.state
+        const { name, error } = this.state
         const { handleChange, handleSubmit } = this
 
         return (
@@ -52,9 +54,9 @@ class UpdateUser extends Component {
                     <label htmlFor="name">Name:</label>
                     <input type="text" name="name" value={name} onChange={handleChange}/>
                     <button className="btn btn-primary" disabled={!name}>Update</button>
+                    {!error ? "" : <div className="error">There was a problem updating the user</div>}
                 </form>
             </div>
-
         )
     }
 }

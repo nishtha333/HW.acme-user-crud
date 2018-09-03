@@ -5,7 +5,8 @@ class CreateUser extends Component {
     constructor() {
         super()
         this.state = {
-            name: ''
+            name: '',
+            error: ''
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -23,10 +24,11 @@ class CreateUser extends Component {
             .then(() => {
                 this.props.history.push('/users')
             })
+            .catch((error) => this.setState({error}))
     }
 
     render() {
-        const { name } = this.state
+        const { name, error } = this.state
         const { handleChange, handleSubmit } = this
 
         return (
@@ -37,6 +39,7 @@ class CreateUser extends Component {
                     <label htmlFor="name">Name:</label>
                     <input type="text" name="name" value={name} onChange={handleChange}/>
                     <button className="btn btn-primary" disabled={!name}>Save</button>
+                    {!error ? "" : <div className="error">There was a problem creating the user</div>}
                 </form>
             </div>
 

@@ -9,9 +9,9 @@ const Users = function({users, deleteUser}) {
             <hr />
             {
                 users.map(user => 
-                    <div key={user.id}>
-                        <Link to={`users/${user.id}`}>{user.name}</Link>
-                        <button type="button" className="btn btn-danger" onClick={() => deleteUser(user.id)}>x</ button>
+                    <div key={user.id} className="row">
+                        <Link to={`/users/${user.id}`} className="column-user">{user.name}</Link>
+                        <button type="button" className="btn btn-danger column-btn" onClick={() => deleteUser(user.id)}>x</ button>
                     </div>
             )}
         </div>

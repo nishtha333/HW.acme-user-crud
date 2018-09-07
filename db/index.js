@@ -5,7 +5,10 @@ const Users = conn.define('user', {
     name: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+            notEmpty: true
+        }
     }
 });
 

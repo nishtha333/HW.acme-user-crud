@@ -19,6 +19,7 @@ class Main extends Component {
         this.updateUser = this.updateUser.bind(this)
     }
 
+    /* To make efficient, dont need to make another call here, since we have the users already and can look for the id passed in as argument */
     fetchUser(id) {
         return axios.get(`/api/users/${id}`)
             .then(response => response.data)
@@ -59,6 +60,9 @@ class Main extends Component {
 
         return (
             <Router>
+                {/*Can separate this into another Component (Nav.js) and call that as a Route without specifying the path.
+                    Can also pass "location"/ "users" (for length) as props. 
+                    We can use that to determine if the user is on the selected path, and can apply classNames accordingly (for CSS) - Prof's Solution */}
                 <div id="main">
                     <div id="btn-group" >
                         <Link to="/">
@@ -73,9 +77,13 @@ class Main extends Component {
                     </div>
                     <br />
                     <div>
+                        {/*Instead of making render function inline, can create separate function and use it here - Prof's Solution 
+                           Create Route for Nav without specifying any path, so it is for everything*/}
                         <Route exact path='/' render={() => <Home users={users} />} />
                         <Route path='/users' render={() => <Users users={users} deleteUser={deleteUser} />} />
                         <Switch>
+                            {/*Can be more efficient. Can just have one component but call them with different props (methods, etc) 
+                               to differentiate between create and update - Prof's Solution */}
                             <Route path='/users/create' render={({history}) => <CreateUser createUser={createUser} history={history} />} />
                             <Route path='/users/:id' render={({history, match}) => <UpdateUser fetchUser={fetchUser} updateUser={updateUser} history={history} id={match.params.id}/>} />
                         </Switch>

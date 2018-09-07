@@ -36,6 +36,8 @@ class UpdateUser extends Component {
             .catch((error) => this.setState({error}))
     }
 
+    /* See Prof's Solution: For combining logic for Update and Create. Need to do more checks on Id's in following 
+        component to make sure updating form and not running into errors */
     componentDidUpdate(prevProps){
         if(prevProps.id !== this.props.id){
             this.fetchUser(this.props.id); 
